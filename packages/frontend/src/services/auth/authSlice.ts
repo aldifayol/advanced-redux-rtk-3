@@ -14,7 +14,7 @@ import { createSlice } from "@reduxjs/toolkit/react";
 export const authBlogApi = createApi({
 	baseQuery: fetchBaseQuery({
     	// Replace your address here if needed i.e. your forwarded address from a cloud environment
-    	baseUrl: "http://127.0.0.1:4040/api/",
+    	baseUrl: "https://effective-invention-g9p7xg4wr429rw6-4040.app.github.dev/api/",
     	prepareHeaders: (headers, { getState }) => {
         	const token = (getState() as RootState).auth.token;
         	if (token) {
@@ -79,29 +79,35 @@ const authSlice = createSlice({
 				}
 				return state;
 		},
-},
+	},
 	extraReducers(builder) {
-    	builder.addMatcher(
-        	authBlogApi.endpoints.login.matchFulfilled,
-        	(state, { payload }) => {
-            	state.token = payload.token;
-            	state.user = {
-                	id: payload.userId,
-                	username: payload.username,
-                	email: payload.email,
-                	role: payload.role,
-            	};
-            	return state;
-        	},
-    	);
-    	builder.addMatcher(authBlogApi.endpoints.logout.matchFulfilled, (state) => {
-        	state.token = null;
-        	state.user = null;
-        	return state;
-    	});
+		builder.addMatcher(
+			authBlogApi.endpoints.login.matchFulfilled,
+			(state, { payload }) => {
+				state.token = payload.token;
+				state.user = {
+					id: payload.userId,
+					username: payload.username,
+					email: payload.email,
+					role: payload.role,
+				};
+				sessionStorage.setItem("isAuthenticated", "true");
+				sessionStorage.setItem("user", `${JSON.stringify(payload)}`);
+				return state;
+			},
+		);
+		builder.addMatcher(authBlogApi.endpoints.logout.matchFulfilled, (state) => {
+			state.token = null;
+			state.user = null;
+			sessionStorage.removeItem("isAuthenticated");
+			sessionStorage.removeItem("user");
+			return state;
+		});
 	},
 });
 
 export default authSlice.reducer;
 
 export const { useLoginMutation, useLogoutMutation, useRegisterMutation } = authBlogApi;
+
+export const { refreshAuthentication } = authSlice.actions;

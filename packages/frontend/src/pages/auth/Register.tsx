@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useRegisterMutation } from "../../services/auth/authSlice";
-import type { AuthState, RegisterRequest } from "../../services/auth/types";
+import type {  RegisterRequest } from "../../services/auth/types";
 
 const Register = ({
 	isAuthenticated,
-    authState,
-}: { isAuthenticated: boolean, authState: AuthState }) => {
+}: { isAuthenticated: boolean }) => {
 	const navigate = useNavigate();
 	const [register, { isLoading }] = useRegisterMutation();
 	const [registerFormData, setRegisterFormData] = useState<RegisterRequest>({
