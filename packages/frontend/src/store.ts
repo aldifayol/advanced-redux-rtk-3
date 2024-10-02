@@ -14,20 +14,20 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 const authListener = createListenerMiddleware();
 
 const store = configureStore({
-    	reducer: {
-            	[blogApi.reducerPath]: blogApi.reducer,
-            	[authBlogApi.reducerPath]: authBlogApi.reducer,
-            	auth: authReducer
-    	},
-    	middleware: (getDefaultMiddleware) => {
-            	return getDefaultMiddleware()
-                    	.concat(authBlogApi.middleware)
-                    	.concat(blogApi.middleware)
-                    	.concat(authListener.middleware);
-    	},
+  reducer: {
+    [blogApi.reducerPath]: blogApi.reducer,
+    [authBlogApi.reducerPath]: authBlogApi.reducer,
+    auth: authReducer,
+  },
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware()
+      .concat(authBlogApi.middleware)
+      .concat(blogApi.middleware)
+      .concat(authListener.middleware);
+  },
 });
 
-setupListeners(store.dispatch)
+setupListeners(store.dispatch);
 
 /**
  *  This is a very _common pattern_ for Redux.
@@ -44,18 +44,17 @@ export default store;
  * discarded.
  **/
 
-
-// authListener.startListening.withTypes<RootState, AppDispatch>()({
-//     predicate(_action, currentState, _originalState) {
-//         return (
-//             currentState.auth.token === null &&
-//             currentState.auth.user === null &&
-//             sessionStorage.getItem("isAuthenticated") === "true"
-//         );
-//     },
-//     effect: async (_action, listenerApi) => {
-//         console.log("Needs update");
-//         await listenerApi.(refreshAuthentication());
-//         await listenerApi.delay(800);
-//     },
-// });
+authListener.startListening.withTypes<RootState, AppDispatch>()({
+  predicate(_action, currentState, _originalState) {
+    return (
+      currentState.auth.token === null &&
+      currentState.auth.user === null &&
+      sessionStorage.getItem("isAuthenticated") === "true"
+    );
+  },
+  effect: async (_action, listenerApi) => {
+    console.log("Needs update");
+    await listenerApi.dispatch(refreshAuthentication());
+    await listenerApi.delay(800);
+  },
+});
