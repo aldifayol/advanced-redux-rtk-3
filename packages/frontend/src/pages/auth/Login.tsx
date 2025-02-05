@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Outlet, useNavigate } from "react-router";
-import { useLoginMutation } from "../../services/auth/authSlice";
-import type { AuthState, LoginRequest } from "../../services/auth/types";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { Outlet, useNavigate } from 'react-router';
+import { useLoginMutation } from '../../services/auth/authSlice';
+import type { AuthState, LoginRequest } from '../../services/auth/types';
+import { Link } from 'react-router-dom';
 
 const Login = ({
   isAuthenticated,
@@ -14,20 +14,20 @@ const Login = ({
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const [loginFormData, setLoginFormData] = useState<LoginRequest>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   return (
     <div className="card">
       {isAuthenticated ? (
         <h3>
-          You are logged in {authState?.user?.username}. Go{" "}
-          <Link to={"/post/create"}>post create</Link> to create your new posts!
+          You are logged in {authState?.user?.username}. Go{' '}
+          <Link to={'/post/create'}>post create</Link> to create your new posts!
         </h3>
       ) : (
         <>
-          <h2>Login to our blogging platform</h2>
+          <h2 className="mb-5 font-extrabold text-3xl">Login to our blogging platform</h2>
           <form
             className="login"
             onSubmit={(e) => {
@@ -37,13 +37,13 @@ const Login = ({
                   .then((data) => {
                     console.log(data);
                     if (data?.data?.ok) {
-                      return navigate("/post/create", {
+                      return navigate('/post/create', {
                         replace: true,
                       });
                     }
-                    alert("Invalid credentials alalalaalal!");
+                    alert('Invalid credentials alalalaalal!');
                   })
-                  .catch(() => alert("Server error! Please file a bug report!"));
+                  .catch(() => alert('Server error! Please file a bug report!'));
               } catch (err) {
                 alert(`Failed to login; got ${err}`);
               }
@@ -63,8 +63,8 @@ const Login = ({
               onChange={(e) => setLoginFormData({ ...loginFormData, password: e.target.value })}
             />
             <div className="buttons">
-              <button type="submit">{isLoading ? "Logging in..." : "Login"}</button>
-              <button type="button" onClick={() => navigate("/register")}>
+              <button type="submit">{isLoading ? 'Logging in...' : 'Login'}</button>
+              <button type="button" onClick={() => navigate('/register')}>
                 Click here to register
               </button>
             </div>
