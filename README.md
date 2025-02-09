@@ -1,3 +1,3 @@
 # advanced-state-management-with-redux-toolkit-quest-template
 
-Prepared template repository for Quest.
+this is demo on using RTK query on React
